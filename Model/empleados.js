@@ -61,7 +61,7 @@ function getEmpleados(nocia,codpla) {
         conn = c;
  
         return conn.execute(
-          `select  NO_CIA , COD_PLA , NO_EMPLE, BASE , EMPLEADO from t_cheques where NO_CIA = :nocia and COD_PLA = :codpla `,
+          `select  t.NO_CIA , t.COD_PLA , t.NO_EMPLE, t.BASE , t.EMPLEADO,c.NO_PLANI,c.F_DESDE from t_cheques t, arplcp c where t.NO_CIA = c.NO_CIA and t.COD_PLA = c.CODPLA and t.NO_CIA = :nocia and t.COD_PLA = :codpla `,
           [nocia,codpla],
           {
             outFormat: oracledb.OBJECT

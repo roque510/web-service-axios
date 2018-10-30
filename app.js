@@ -34,7 +34,8 @@ let jsonOBJ =
 
 function addObject(p){  
   if (!p.NO_CIA || !p.NO_EMPLE || !p.COD_PLA || !p.NO_PLANI || !p.F_DESDE){ // check if all variables exist
-    console.log("Something wrong happened");    
+    console.log("Something wrong happened");
+    console.log(p);
     process.exit();//Exit app
   }
 
@@ -137,40 +138,39 @@ oracledb.createPool(config.database)
     return employees.getEmpleados(NOCIA,CODPLA);
   })
   .then(function(emp) {
-    emp.map(function (person,key){      
-      employees.getEmployee(person.NO_EMPLE)        
-        .then(function(p){
+    let arrPromise = [];
+    let jsonTest = emp.map((person,key) => {  
+      let test = employees.getEmployee(person.NO_EMPLE)        
+        .then((p) => {
           person.ORDERNR = key;
           person.CEDULA = p.CEDULA;
           person.NACION = p.NACION;
-          employees.getPlaniAndFdesde(NOCIA,CODPLA)
-            .then( function(p){
-              person.NO_PLANI = p[0].NO_PLANI;
-              person.F_DESDE = p[0].F_DESDE;
-
-              addObject({... person});
-              //console.log(person);
-
-
-              
-            }).then( function () {
-              //console.log(jsonOBJ);
-              var json = JSON.stringify(jsonOBJ);
-              var fs = require('fs');
-              fs.writeFile('myjsonfile.json', json, 'utf8');
-              console.log("JSON FILE DONE");
-            })
-            .catch(function(err) {
-              console.log(err);
-            });
-          
-      });
+            
+          return person;
+      });        
+        arrPromise.push(test);
     })
 
 
+    return arrPromise;
+
+
+  }).then( (ans) => {
+    Promise.all(ans).then((e) => {
+      
+      e.map((person) => {
+        addObject(person);
+      });
+
+      var json = JSON.stringify(jsonOBJ);
+      var fs = require('fs');
+      fs.writeFile('myjsonfile.json', json, 'utf8');
+      console.log("JSON FILE DONE");
+      
+    })
   })
   .catch(function(err) {
-    console.log(err);
+    console.log("ERRR",err);
   });
 
 
