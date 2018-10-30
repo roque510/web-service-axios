@@ -6,6 +6,7 @@
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "^0.4.2",
     "axios": "^0.18.0",
+    "oracledb": "^3.0.0",
     "tough-cookie": "^2.4.3"
   },
   "devDependencies": {},

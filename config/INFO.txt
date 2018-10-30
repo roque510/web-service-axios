@@ -1,0 +1,18 @@
+no cia
+no emple
+base - el salario a pagar
+cedula.
+
+
+refrencia
+	nocia noemple planilla(CODPLA) ARPLME
+	periodo(NOPLANI) fecha_inicio(F_DESDE) ARPLCP
+
+
+	06 000000 11 22 333333
+
+	
+
+
+
+compañia y planilla
